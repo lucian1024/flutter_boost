@@ -114,8 +114,7 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
   ///if container num >= 1,the state == [AppLifecycleState.resumed]
   ///else state == [AppLifecycleState.paused]
   void _addAppLifecycleStateEventListener() {
-    _lifecycleStateListenerRemover = BoostChannel.instance
-        .addEventListener(_appLifecycleChangedKey, (key, arguments) {
+    _lifecycleStateListenerRemover = addEventListener(_appLifecycleChangedKey, (key, arguments) {
       //we just deal two situation,resume and pause
       //and 0 is resumed
       //and 2 is paused
