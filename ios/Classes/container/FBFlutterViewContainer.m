@@ -213,6 +213,12 @@ _Pragma("clang diagnostic pop")
     // Ensure current view controller attach to Flutter engine
     [self attatchFlutterEngine];
     
+    // Fix iOS keyboard physical keyboard doesn't work in add to app. https://github.com/flutter/engine/pull/32098
+    // Flutter Engine 3.0版本已经修复了，升级引擎后可以去掉此处理
+    if ([self respondsToSelector:@selector(addInternalPlugins)]) {
+        [self performSelector:@selector(addInternalPlugins)];
+    }
+    
     [super viewDidLoad];
     //只有在不透明情况下，才设置背景颜色，否则不设置颜色（也就是默认透明）
     if(self.opaque){
