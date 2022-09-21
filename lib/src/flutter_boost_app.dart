@@ -609,11 +609,22 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
 
   void onContainerShow(CommonParams params) {
     final container = _findContainerByUniqueId(params.uniqueId);
+    if(container == null){
+      Logger.error(
+          'onContainerShow, is null, pageName[${params.pageName}], uniqueId[${params.uniqueId}], uniqueId[${params.key}], arguments[${params.arguments}]');
+      return;
+    }
+    
     BoostLifecycleBinding.instance.containerDidShow(container!);
   }
 
   void onContainerHide(CommonParams params) {
     final container = _findContainerByUniqueId(params.uniqueId);
+    if(container == null){
+      Logger.error(
+          'onContainerHide, is null, pageName[${params.pageName}], uniqueId[${params.uniqueId}], uniqueId[${params.key}], arguments[${params.arguments}]');
+      return;
+    }
     BoostLifecycleBinding.instance.containerDidHide(container);
   }
 
