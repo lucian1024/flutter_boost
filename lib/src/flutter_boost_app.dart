@@ -615,7 +615,7 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
       return;
     }
     
-    BoostLifecycleBinding.instance.containerDidShow(container!);
+    BoostLifecycleBinding.instance.containerDidShow(container);
   }
 
   void onContainerHide(CommonParams params) {
