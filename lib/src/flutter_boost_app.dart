@@ -602,7 +602,15 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
   void _completePendingResultIfNeeded<T extends Object>(String? uniqueId,
       {T? result}) {
     if (uniqueId != null && _pendingResult.containsKey(uniqueId)) {
-      _pendingResult[uniqueId]!.complete(result);
+      final pendingResult = _pendingResult[uniqueId]!;
+
+      try {
+        pendingResult.complete(result);
+      } on TypeError catch (error) {
+        Logger.error('exception _completePendingResultIfNeeded, uniqueId[$uniqueId], result[$result]\n$error');
+        pendingResult.complete(result ?? {});
+      }
+
       _pendingResult.remove(uniqueId);
     }
   }
