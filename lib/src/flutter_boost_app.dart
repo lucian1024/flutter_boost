@@ -606,8 +606,8 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
 
       try {
         pendingResult.complete(result);
-      } on TypeError catch (error) {
-        Logger.error('exception _completePendingResultIfNeeded, uniqueId[$uniqueId], result[$result]\n$error');
+      } on TypeError catch (error, stack) {
+        Logger.error('exception _completePendingResultIfNeeded, uniqueId[$uniqueId], result[$result]\n$error\n$stack');
         pendingResult.complete(result ?? {});
       }
 
