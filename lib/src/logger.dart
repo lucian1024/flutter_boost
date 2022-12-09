@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 
 class Logger {
+  static ValueChanged<String>? logInfo;
+  static ValueChanged<String>? logErr;
+
   static void log(String msg) {
-    assert(() {
-      debugPrint('FlutterBoost#$msg');
-      return true;
-    }());
+    if (logInfo != null) {
+      logInfo?.call('FlutterBoost#$msg');
+    } else {
+      assert(() {
+        debugPrint('FlutterBoost#$msg');
+        return true;
+      }());
+    }
   }
 
   static void error(String msg) {
-    debugPrint('FlutterBoost#$msg');
+    if (logErr != null) {
+      logErr?.call('FlutterBoost#$msg');
+    } else {
+      debugPrint('FlutterBoost#$msg');
+    }
   }
 }
