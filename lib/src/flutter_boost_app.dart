@@ -102,12 +102,14 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
 
   void _checkContainerMounted(BoostContainer initialContainer) {
     if (overlayKey.currentState == null) {
+      Logger.log("overlayKey.currentState is null, add check callback for next frame");
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _checkContainerMounted(initialContainer);
       });
       return;
     }
 
+    Logger.log("overlayKey state is mounted");
     // try to restore routes from host when hot restart.
     assert(() {
       _restoreStackForHotRestart();
