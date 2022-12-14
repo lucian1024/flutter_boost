@@ -96,17 +96,28 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
     // Make sure that the widget in the tree that matches [overlayKey]
     // is already mounted, or [refreshOnPush] will fail.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // try to restore routes from host when hot restart.
-      assert(() {
-        _restoreStackForHotRestart();
-        return true;
-      }());
-
-      refreshOnPush(initialContainer);
-      _boostFlutterRouterApi.isEnvReady = true;
-      _addAppLifecycleStateEventListener();
-      BoostOperationQueue.instance.runPendingOperations();
+      _checkContainerMounted(initialContainer);
     });
+  }
+
+  void _checkContainerMounted(BoostContainer initialContainer) {
+    if (overlayKey.currentState == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _checkContainerMounted(initialContainer);
+      });
+      return;
+    }
+
+    // try to restore routes from host when hot restart.
+    assert(() {
+      _restoreStackForHotRestart();
+      return true;
+    }());
+
+    refreshOnPush(initialContainer);
+    _boostFlutterRouterApi.isEnvReady = true;
+    _addAppLifecycleStateEventListener();
+    BoostOperationQueue.instance.runPendingOperations();
   }
 
   ///Setup the AppLifecycleState change event launched from native
