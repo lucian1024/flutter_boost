@@ -5,14 +5,25 @@
 import 'package:flutter/material.dart';
 
 class Logger {
+  static ValueChanged<String>? logInfo;
+  static ValueChanged<String>? logErr;
+
   static void log(String msg) {
-    assert(() {
-      debugPrint('FlutterBoost_dart#$msg');
-      return true;
-    }());
+    if (logInfo != null) {
+      logInfo?.call('FlutterBoost_dart#$msg');
+    } else {
+      assert(() {
+        debugPrint('FlutterBoost_dart#$msg');
+        return true;
+      }());
+    }
   }
 
   static void error(String msg) {
-    debugPrint('FlutterBoost_dart#$msg');
+    if (logErr != null) {
+      logErr?.call('FlutterBoost_dart#$msg');
+    } else {
+      debugPrint('FlutterBoost_dart#$msg');
+    }
   }
 }

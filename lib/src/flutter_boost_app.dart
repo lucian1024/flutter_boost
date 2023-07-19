@@ -102,17 +102,30 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
     // Make sure that the widget in the tree that matches [overlayKey]
     // is already mounted, or [refreshOnPush] will fail.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // try to restore routes from host when hot restart.
-      assert(() {
-        _restoreStackForHotRestart();
-        return true;
-      }());
-
-      refreshOnPush(initialContainer);
-      _boostFlutterRouterApi.isEnvReady = true;
-      _addAppLifecycleStateEventListener();
-      BoostOperationQueue.instance.runPendingOperations();
+      _checkContainerMounted(initialContainer);
     });
+  }
+
+  void _checkContainerMounted(BoostContainer initialContainer) {
+    if (overlayKey.currentState == null) {
+      Logger.log("overlayKey.currentState is null, add check callback for next frame");
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _checkContainerMounted(initialContainer);
+      });
+      return;
+    }
+
+    Logger.log("overlayKey state is mounted");
+    // try to restore routes from host when hot restart.
+    assert(() {
+      _restoreStackForHotRestart();
+      return true;
+    }());
+
+    refreshOnPush(initialContainer);
+    _boostFlutterRouterApi.isEnvReady = true;
+    _addAppLifecycleStateEventListener();
+    BoostOperationQueue.instance.runPendingOperations();
   }
 
   ///Setup the AppLifecycleState change event launched from native
@@ -120,8 +133,7 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
   ///if container num >= 1,the state == [AppLifecycleState.resumed]
   ///else state == [AppLifecycleState.paused]
   void _addAppLifecycleStateEventListener() {
-    _lifecycleStateListenerRemover = BoostChannel.instance
-        .addEventListener(_appLifecycleChangedKey, (key, arguments) {
+    _lifecycleStateListenerRemover = addEventListener(_appLifecycleChangedKey, (key, arguments) {
       //we just deal two situation,resume and pause
       //and 0 is resumed
       //and 2 is paused
@@ -529,13 +541,13 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
     return true;
   }
 
-  Future<bool> _performBackPressed(
+  Future<bool?> _performBackPressed(
       BoostContainer container, Object? result) async {
     if (container.backPressedHandler != null) {
       container.backPressedHandler!.call();
       return true;
     } else {
-      return (await container.navigator?.maybePop(result))!;
+      return (await container.navigator?.maybePop(result));
     }
   }
 
@@ -626,7 +638,7 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
   void _completePendingResultIfNeeded<T extends Object?>(String? uniqueId,
       {T? result}) {
     if (uniqueId != null && _pendingResult.containsKey(uniqueId)) {
-      _pendingResult[uniqueId]!.complete(result ?? {});
+      _pendingResult[uniqueId]!.complete(result);
       _pendingResult.remove(uniqueId);
     }
   }
