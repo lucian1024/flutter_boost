@@ -613,6 +613,7 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
         container.removePage(page);
       }
     }
+    _completePendingResultIfNeeded(uniqueId);
     Logger.log('remove,  uniqueId=$uniqueId, $_containers');
   }
 
