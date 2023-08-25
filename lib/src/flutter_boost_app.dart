@@ -514,8 +514,11 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
             ..arguments = ((result is Map<String, dynamic>)
                 ? result
                 : <String, dynamic>{});
-          await nativeRouterApi.popRoute(params);
+
           targetPage = targetPage ?? topPage;
+          _completePendingResultIfNeeded(targetPage, result: result);
+
+          await nativeRouterApi.popRoute(params);
         } else {
           if (!onBackPressed) {
             container.navigator!.pop(result);
