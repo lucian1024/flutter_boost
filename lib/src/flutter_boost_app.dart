@@ -514,11 +514,8 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
             ..arguments = ((result is Map<String, dynamic>)
                 ? result
                 : <String, dynamic>{});
-
-          targetPage = targetPage ?? topPage;
-          _completePendingResultIfNeeded(targetPage, result: result);
-
           await nativeRouterApi.popRoute(params);
+          targetPage = targetPage ?? topPage;
         } else {
           if (!onBackPressed) {
             container.navigator!.pop(result);
@@ -616,7 +613,6 @@ class FlutterBoostAppState extends State<FlutterBoostApp> {
         container.removePage(page);
       }
     }
-    _completePendingResultIfNeeded(uniqueId);
     Logger.log('remove,  uniqueId=$uniqueId, $_containers');
   }
 

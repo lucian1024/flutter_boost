@@ -149,7 +149,9 @@
         };
         //调用代理回调给调用层
         [self.delegate popRoute:options];
-    };
+    } else {
+        completion(nil);
+    }
 }
 
 - (nullable FBStackInfo *)getStackFromHostWithError:(FlutterError *_Nullable *_Nonnull)error {
