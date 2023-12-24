@@ -31,13 +31,13 @@
 @implementation FBLifecycle
 
 + (void)pause{
-    [[FlutterBoost instance]sendEventToFlutterWith:@"app_lifecycle_changed_key" arguments:@{@"lifecycleState":@2}];
+    [[FlutterBoost instance]sendEventToFlutterWith:@"app_lifecycle_changed_key" arguments:@{@"lifecycleState":@4}];
     if(ENGINE.viewController != nil){
         ENGINE.viewController = nil;
     }
 }
 + (void)resume{
-    [[FlutterBoost instance]sendEventToFlutterWith:@"app_lifecycle_changed_key" arguments:@{@"lifecycleState":@0}];
+    [[FlutterBoost instance]sendEventToFlutterWith:@"app_lifecycle_changed_key" arguments:@{@"lifecycleState":@1}];
 }
 
 @end
